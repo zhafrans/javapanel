@@ -6,11 +6,10 @@ import java.sql.Connection;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import java.awt.Point;
 import java.text.SimpleDateFormat;
-import java.util.Timer;
-import java.util.TimerTask;
-import static java.lang.String.format;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Date;
 
 /**
  *
@@ -18,7 +17,38 @@ import static java.lang.String.format;
  */
 
 public class View extends javax.swing.JFrame {
+        private int waktumulai = 0;
+
     
+    public void tanggal(){
+        Date ys = new Date();
+        SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
+        labeltanggal.setText(s.format(ys));
+    }
+    
+    private void JamRealTime(){
+        
+        new Thread(){
+            @Override
+            public void run(){
+                while(waktumulai == 0){
+                    Calendar kalender = new GregorianCalendar();
+                    int jam = kalender.get(Calendar.HOUR);
+                    int menit = kalender.get(Calendar.MINUTE);
+                    int detik = kalender.get(Calendar.SECOND);
+                    int AMPM = kalender.get(Calendar.AM_PM);
+                    String SiangMalam;
+                    if (AMPM == 1){
+                        SiangMalam = "PM";
+                    }else{
+                        SiangMalam = "AM";
+                    }
+                    String JamRealTime = jam + ":" + menit + ":" + detik +" " + SiangMalam;
+                    labeljam.setText(JamRealTime);
+                }
+            }
+        }.start();
+    }
     private void kosongkan_form(){
         txtNIK.setEditable(true);
         txtNIK.setText(null);
@@ -99,7 +129,8 @@ public class View extends javax.swing.JFrame {
         kosongkan_form();
         tampilkan_dataK();
         kosongkan_formK();
-        
+        JamRealTime();
+        tanggal();
     }
 
     /**
@@ -152,8 +183,8 @@ public class View extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        tanggal = new javax.swing.JLabel();
-        jam = new javax.swing.JLabel();
+        labeltanggal = new javax.swing.JLabel();
+        labeljam = new javax.swing.JLabel();
         panelViewInputDataKader = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
@@ -286,7 +317,7 @@ public class View extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/icons8-user-male-40.png"))); // NOI18N
-        jLabel5.setText("ADMIN");
+        jLabel5.setText("ADMIN POSYANDU");
 
         btnAbout.setBackground(new java.awt.Color(127, 140, 141));
         btnAbout.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -427,12 +458,13 @@ public class View extends javax.swing.JFrame {
                             .addComponent(btnKalkulator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelKiriLayout.createSequentialGroup()
                                 .addGap(107, 107, 107)
-                                .addComponent(btnLogOut))
-                            .addGroup(panelKiriLayout.createSequentialGroup()
-                                .addGap(68, 68, 68)
-                                .addComponent(jLabel5)))
+                                .addComponent(btnLogOut)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(panelKiriLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelKiriLayout.setVerticalGroup(
             panelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -458,7 +490,7 @@ public class View extends javax.swing.JFrame {
         panelKanan.setBackground(new java.awt.Color(44, 62, 80));
         panelKanan.setLayout(new java.awt.CardLayout());
 
-        panelViewInputData.setBackground(new java.awt.Color(52, 73, 94));
+        panelViewInputData.setBackground(new java.awt.Color(44, 62, 80));
         panelViewInputData.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel5.setBackground(new java.awt.Color(149, 165, 166));
@@ -484,7 +516,7 @@ public class View extends javax.swing.JFrame {
                 .addGap(0, 37, Short.MAX_VALUE))
         );
 
-        panelViewInputData.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 520, 100));
+        panelViewInputData.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 520, 100));
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("NIK");
@@ -538,13 +570,13 @@ public class View extends javax.swing.JFrame {
 
         panelViewInputData.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 388, -1, 111));
 
-        btnTambah.setText("Tambah Data");
+        btnTambah.setText("Clear");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTambahActionPerformed(evt);
             }
         });
-        panelViewInputData.add(btnTambah, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 351, -1, -1));
+        panelViewInputData.add(btnTambah, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 350, -1, -1));
 
         btnSimpan.setText("Simpan");
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -552,7 +584,7 @@ public class View extends javax.swing.JFrame {
                 btnSimpanActionPerformed(evt);
             }
         });
-        panelViewInputData.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 351, -1, -1));
+        panelViewInputData.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
 
         btnEdit.setText("Edit");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
@@ -560,7 +592,7 @@ public class View extends javax.swing.JFrame {
                 btnEditActionPerformed(evt);
             }
         });
-        panelViewInputData.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 351, -1, -1));
+        panelViewInputData.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 350, -1, -1));
 
         btnHapus.setText("Hapus");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
@@ -568,7 +600,7 @@ public class View extends javax.swing.JFrame {
                 btnHapusActionPerformed(evt);
             }
         });
-        panelViewInputData.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(272, 351, -1, -1));
+        panelViewInputData.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 350, -1, -1));
 
         btnBatal.setText("Batal");
         btnBatal.addActionListener(new java.awt.event.ActionListener() {
@@ -628,9 +660,13 @@ public class View extends javax.swing.JFrame {
         jLabel22.setForeground(new java.awt.Color(255, 255, 255));
         jLabel22.setText("Jam :");
 
-        tanggal.setText("jLabel23");
+        labeltanggal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        labeltanggal.setForeground(new java.awt.Color(52, 152, 219));
+        labeltanggal.setText("tanggal");
 
-        jam.setText("jLabel23");
+        labeljam.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        labeljam.setForeground(new java.awt.Color(52, 152, 219));
+        labeljam.setText("jam");
 
         javax.swing.GroupLayout panelViewInformasiLayout = new javax.swing.GroupLayout(panelViewInformasi);
         panelViewInformasi.setLayout(panelViewInformasiLayout);
@@ -649,25 +685,25 @@ public class View extends javax.swing.JFrame {
                         .addGap(22, 22, 22)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tanggal)
+                        .addComponent(labeltanggal)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel22)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jam)
+                        .addComponent(labeljam)
                         .addGap(23, 23, 23)))
                 .addGap(93, 93, 93))
         );
         panelViewInformasiLayout.setVerticalGroup(
             panelViewInformasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelViewInformasiLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(20, 20, 20)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addGroup(panelViewInformasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jLabel22)
-                    .addComponent(tanggal)
-                    .addComponent(jam))
+                    .addComponent(labeltanggal)
+                    .addComponent(labeljam))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -758,7 +794,7 @@ public class View extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tableDataKader);
 
-        btnTambahK.setText("Tambah Data");
+        btnTambahK.setText("Clear");
         btnTambahK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTambahKActionPerformed(evt);
@@ -802,14 +838,14 @@ public class View extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelViewInputDataKaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelViewInputDataKaderLayout.createSequentialGroup()
-                        .addComponent(btnTambahK)
-                        .addGap(14, 14, 14)
                         .addComponent(btnSimpanK)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnTambahK)
+                        .addGap(18, 18, 18)
                         .addComponent(btnEditK)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(btnHapusK)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(btnBatalK))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelViewInputDataKaderLayout.createSequentialGroup()
@@ -835,9 +871,9 @@ public class View extends javax.swing.JFrame {
         panelViewInputDataKaderLayout.setVerticalGroup(
             panelViewInputDataKaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelViewInputDataKaderLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(19, 19, 19)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addGroup(panelViewInputDataKaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(txtNIKK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -860,10 +896,10 @@ public class View extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(panelViewInputDataKaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambahK)
-                    .addComponent(btnSimpanK)
                     .addComponent(btnEditK)
                     .addComponent(btnHapusK)
-                    .addComponent(btnBatalK))
+                    .addComponent(btnBatalK)
+                    .addComponent(btnSimpanK))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -958,9 +994,9 @@ public class View extends javax.swing.JFrame {
         panelViewKalkulatorLayout.setVerticalGroup(
             panelViewKalkulatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelViewKalkulatorLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(20, 20, 20)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
+                .addGap(62, 62, 62)
                 .addGroup(panelViewKalkulatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
                     .addComponent(tinggiValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1420,8 +1456,9 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel jam;
     private javax.swing.JLabel jlabelbmi;
+    private javax.swing.JLabel labeljam;
+    private javax.swing.JLabel labeltanggal;
     private javax.swing.JTextField output;
     private javax.swing.JPanel panelKanan;
     private javax.swing.JPanel panelKiri;
@@ -1431,7 +1468,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JPanel panelViewKalkulator;
     private javax.swing.JTable tableDataBayi;
     private javax.swing.JTable tableDataKader;
-    private javax.swing.JLabel tanggal;
     private javax.swing.JTextField tinggiValue;
     private javax.swing.JTextField txtAlamat;
     private javax.swing.JTextField txtAlamatK;

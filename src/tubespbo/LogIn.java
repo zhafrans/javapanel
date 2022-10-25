@@ -5,6 +5,8 @@
  */
 package tubespbo;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Zhatozs
@@ -182,6 +184,9 @@ public class LogIn extends javax.swing.JFrame {
         if(user.equals("admin") && pass.equals("admin")){
             new View().setVisible(true);
             this.setVisible(false);
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Password atau Username yang anda masukkan SALAH");
+            
         }
     }//GEN-LAST:event_btnMasukActionPerformed
 
